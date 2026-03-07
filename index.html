@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T7 TOKYO | Tokyo Premium Models</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --pink:   #e40057;
+      --teal:   #00bcd4;
+      --green:  #39cb54;
+      --orange: #ff9c00;
+      --red:    #ff2442;
+      --dark:   #222;
+      --gray:   #555;
+      --light:  #f5f5f5;
+    }
+
+    body {
+      font-family: 'Hiragino Sans', 'Yu Gothic', 'Meiryo', Arial, sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* =====================================================
+       DESKTOP HEADER
+    ===================================================== */
+    .pc-header {
+      background: white;
+      border-bottom: 3px solid var(--pink);
+    }
+
+    .header-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    /* Logo shimmer */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .logo-block { text-align: center; }
+    .logo-name {
+      font-size: 32px;
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 3px;
+      line-height: 1;
+      background: linear-gradient(90deg, var(--pink) 0%, #ff6b8a 40%, #fff 50%, #ff6b8a 60%, var(--pink) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3.5s linear infinite;
+    }
+    .logo-sub {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+      letter-spacing: 1px;
+    }
+
+    /* Lang toggle desktop */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #f5f5f5;
+      border-radius: 20px;
+      padding: 3px;
+      border: 1px solid #e0e0e0;
+    }
+    .lang-btn {
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: #888;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--pink);
+      color: white;
+      box-shadow: 0 2px 6px rgba(228,0,87,0.35);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* =====================================================
+       DESKTOP NAVIGATION
+    ===================================================== */
+    .pc-nav {
+      background: white;
+      border-bottom: 2px solid var(--pink);
+    }
+
+    /* Section sweep animation */
+    @keyframes sweep {
+      from { transform: scaleX(0); transform-origin: left; }
+      to   { transform: scaleX(1); transform-origin: left; }
+    }
+
+    .nav-contacts {
+      max-width: 1000px; margin: 0 auto;
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px;
+    }
+    .nc-home {
+      font-size: 15px;
+      font-weight: 900;
+      font-style: italic;
+      color: var(--pink);
+      letter-spacing: 2px;
+      padding: 5px 12px;
+      border: 2px solid var(--pink);
+      border-radius: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex; align-items: center; gap: 6px;
+      cursor: default; user-select: none;
+    }
+    .nc-logo-icon {
+      width: 16px; height: 16px; flex-shrink: 0;
+      fill: var(--pink);
+    }
+
+    .nc-divider {
+      width: 1px; height: 24px;
+      background: #e0e0e0;
+      flex-shrink: 0;
+    }
+
+    .nc-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 5px;
+      font-size: 13px; font-weight: bold; color: white;
+      text-decoration: none; transition: filter 0.15s, transform 0.1s;
+    }
+    .nc-btn:hover  { filter: brightness(0.9); }
+    .nc-btn:active { transform: scale(0.96); }
+    .nc-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .nc-channel { background: var(--pink); }
+    .nc-tg      { background: #42A5F5; }
+    .nc-line    { background: #66BB6A; }
+    .nc-wa      { background: #2E7D32; }
+
+    /* =====================================================
+       MOBILE HEADER
+    ===================================================== */
+    .sp-header {
+      display: none;
+      background: white;
+      border-bottom: 3px solid var(--pink);
+    }
+
+    .sp-header-top {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+    }
+
+    .sp-header-left { display: flex; align-items: center; gap: 8px; }
+
+    .sp-logo {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 20px; font-weight: 900; font-style: italic;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, var(--pink), #ff6b8a 50%, var(--pink));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3.5s linear infinite;
+    }
+    .sp-logo-icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      fill: var(--pink); -webkit-text-fill-color: unset;
+      filter: drop-shadow(0 0 3px rgba(228,0,87,0.4));
+    }
+
+    /* Lang toggle mobile */
+    .sp-lang {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: #f5f5f5;
+      border-radius: 14px;
+      padding: 2px;
+      border: 1px solid #e0e0e0;
+    }
+    .sp-lang .lang-btn {
+      padding: 3px 9px;
+      font-size: 11px;
+    }
+
+    .sp-menu-btn {
+      width: 40px; height: 40px;
+      background: var(--pink); border-radius: 50%;
+      border: none; cursor: pointer;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 4px;
+      flex-shrink: 0;
+    }
+    .sp-menu-btn .b { display: block; width: 18px; height: 2px; background: white; border-radius: 1px; }
+
+    /* =====================================================
+       OVERLAY SIDE MENU
+    ===================================================== */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 500; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.on { opacity: 1; pointer-events: all; }
+
+    .side-menu {
+      position: fixed; top: 0; left: -280px;
+      width: 280px; height: 100%;
+      background: white; z-index: 600;
+      display: flex; flex-direction: column;
+      transition: left 0.35s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .side-menu.on { left: 0; }
+
+    .sm-head {
+      background: var(--pink); padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sm-head .title { color: white; font-size: 18px; font-weight: 900; font-style: italic; }
+    .sm-close {
+      background: rgba(255,255,255,0.2); border: none;
+      color: white; width: 32px; height: 32px;
+      border-radius: 50%; font-size: 17px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .sm-btns { padding: 16px 14px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .sm-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      text-align: center; padding: 13px;
+      border-radius: 8px; font-size: 14px; font-weight: bold; color: white;
+      transition: opacity 0.15s, transform 0.1s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .sm-btn:hover  { opacity: 0.88; }
+    .sm-btn:active { transform: scale(0.97); }
+
+    /* =====================================================
+       PAGE CONTENT
+    ===================================================== */
+    .page-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px 12px 90px;
+    }
+
+    /* =====================================================
+       HERO BANNER
+    ===================================================== */
+    .hero-banner {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: 8px;
+      padding: 24px 20px;
+      margin-bottom: 14px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .hero-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(ellipse at center, rgba(228,0,87,0.12) 0%, transparent 60%);
+      animation: heroPulse 4s ease-in-out infinite;
+    }
+
+    @keyframes heroPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50%       { transform: scale(1.1); opacity: 1; }
+    }
+
+    .hero-text { position: relative; z-index: 1; }
+    .hero-title {
+      font-size: 26px; font-weight: 900; font-style: italic;
+      color: white; letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(228,0,87,0.5);
+      line-height: 1;
+    }
+    .hero-sub {
+      font-size: 12px; color: rgba(255,255,255,0.65);
+      margin-top: 6px; letter-spacing: 1px;
+    }
+    .hero-tag {
+      display: inline-block;
+      background: var(--pink);
+      color: white; font-size: 10px; font-weight: bold;
+      padding: 2px 8px; border-radius: 10px;
+      margin-top: 8px; letter-spacing: 0.5px;
+    }
+
+    .hero-deco {
+      position: relative; z-index: 1;
+      font-size: 52px; opacity: 0.18;
+      animation: heroDeco 6s ease-in-out infinite;
+    }
+    @keyframes heroDeco {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50%       { transform: translateY(-8px) rotate(5deg); }
+    }
+
+    /* =====================================================
+       SECTION HEAD
+    ===================================================== */
+    .sec-head {
+      background: linear-gradient(to right, var(--pink) 0%, #ff6b8a 100%);
+      color: white; padding: 10px 16px;
+      font-size: 14px; font-weight: bold;
+      margin-bottom: 12px; border-radius: 4px;
+      display: flex; align-items: center; gap: 8px;
+      animation: sweep 0.6s ease forwards;
+      position: relative; overflow: hidden;
+    }
+    .sec-head::before { content: '◆'; font-size: 10px; opacity: 0.7; }
+    .sec-head::after {
+      content: '';
+      position: absolute; top: 0; right: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: secShine 3s ease-in-out infinite;
+    }
+    @keyframes secShine {
+      0%   { right: -100%; }
+      50%, 100% { right: 100%; }
+    }
+
+    /* =====================================================
+       LOADER
+    ===================================================== */
+    .loader { text-align: center; padding: 50px; }
+    .spinner {
+      display: inline-block;
+      width: 40px; height: 40px;
+      border: 4px solid #fce4ec;
+      border-top-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* =====================================================
+       MODEL GRID
+    ===================================================== */
+    .model-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    /* =====================================================
+       MODEL CARD
+    ===================================================== */
+    .model-card {
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden; cursor: pointer;
+      transition: box-shadow 0.25s, transform 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .model-card:hover {
+      box-shadow: 0 10px 28px rgba(228,0,87,0.22);
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    .card-top {
+      background: #444; color: white;
+      font-size: 10px; text-align: center;
+      padding: 3px 4px; letter-spacing: 0.3px;
+    }
+
+    .card-photo {
+      position: relative; width: 100%;
+      padding-top: 133%; overflow: hidden;
+    }
+    .card-photo img {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.45s ease;
+    }
+    .model-card:hover .card-photo img { transform: scale(1.07); }
+
+    /* NewCast pulsing badge */
+    @keyframes pulseBadge {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(228,0,87,0.5); }
+      50%       { box-shadow: 0 0 0 4px rgba(228,0,87,0); }
+    }
+
+    .bdg {
+      position: absolute; font-size: 9px;
+      font-weight: bold; color: white;
+      padding: 2px 7px; line-height: 1.5;
+      letter-spacing: 0.3px;
+    }
+    .bdg-new     { top: 0; left: 0; background: var(--pink); animation: pulseBadge 1.8s ease-in-out infinite; }
+    .bdg-photo   { top: 0; right: 0; background: var(--teal); }
+    .bdg-status  {
+      bottom: 0; left: 0; background: var(--teal);
+      max-width: 72%; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* Tier badges */
+    .bdg-luxury  {
+      bottom: 0; right: 0;
+      background: linear-gradient(135deg, #b8860b, #ffd54f);
+      color: #1a1a1a; font-weight: 900;
+      text-shadow: none;
+    }
+    .bdg-premium {
+      bottom: 0; right: 0;
+      background: linear-gradient(135deg, #6a1b9a, #ab47bc);
+    }
+    .bdg-standard {
+      bottom: 0; right: 0;
+      background: linear-gradient(135deg, #37474f, #607d8b);
+    }
+
+    .card-info { padding: 7px 6px 0; }
+
+    .card-name {
+      font-size: 12.5px; font-weight: bold;
+      text-align: center; color: #111;
+      line-height: 1.3;
+    }
+
+    .card-meas {
+      font-size: 10px; text-align: center;
+      color: #777; margin-top: 3px;
+      letter-spacing: 0.2px;
+    }
+    .card-meas .cup { color: var(--pink); font-weight: bold; }
+
+    .card-info { padding: 7px 6px 8px; }
+
+    /* =====================================================
+       EMPTY STATE (floating petals)
+    ===================================================== */
+    @keyframes floatPetal {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      50%  { transform: translateY(-14px) rotate(180deg); opacity: 1; }
+      100% { transform: translateY(0) rotate(360deg); opacity: 0.7; }
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center; padding: 60px 20px;
+      color: #aaa;
+    }
+    .empty-petals {
+      display: flex; justify-content: center; gap: 10px; margin-bottom: 16px;
+    }
+    .empty-petals span {
+      font-size: 26px;
+      display: inline-block;
+      animation: floatPetal 2.4s ease-in-out infinite;
+    }
+    .empty-petals span:nth-child(2) { animation-delay: 0.4s; font-size: 20px; }
+    .empty-petals span:nth-child(3) { animation-delay: 0.8s; font-size: 30px; }
+    .empty-petals span:nth-child(4) { animation-delay: 1.2s; font-size: 18px; }
+    .empty-petals span:nth-child(5) { animation-delay: 0.2s; font-size: 24px; }
+    .empty-state .et { font-size: 16px; font-weight: bold; color: #555; margin-bottom: 8px; }
+    .empty-state .es { font-size: 12px; }
+    .empty-state a { color: var(--pink); font-weight: bold; }
+
+    /* =====================================================
+       MOBILE BOTTOM CTA
+    ===================================================== */
+    .mob-cta {
+      display: none;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 400;
+      box-shadow: 0 -3px 14px rgba(0,0,0,0.3);
+    }
+    .mob-cta-inner { display: flex; height: 58px; }
+    .mob-cta-btn {
+      flex: 1;
+      display: flex; flex-direction: row;
+      align-items: center; justify-content: center;
+      gap: 7px; color: white;
+      font-size: 13px; font-weight: 800;
+      text-decoration: none;
+      border-right: 1px solid rgba(255,255,255,0.25);
+      transition: filter 0.15s;
+    }
+    .mob-cta-btn:last-child { border-right: none; }
+    .mob-cta-btn:active { filter: brightness(0.82); }
+    .mob-cta-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .mob-cta-tg   { background: #42A5F5; }
+    .mob-cta-line { background: #66BB6A; }
+    .mob-cta-wa   { background: #2E7D32; }
+
+    /* =====================================================
+       SCROLL TO TOP
+    ===================================================== */
+    .btn-top {
+      position: fixed; bottom: 70px; right: 16px;
+      width: 42px; height: 42px;
+      background: var(--pink); color: white;
+      border: none; border-radius: 50%;
+      font-size: 18px; cursor: pointer;
+      box-shadow: 0 3px 10px rgba(228,0,87,0.4);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.2s;
+      z-index: 300;
+    }
+    .btn-top.show { opacity: 1; pointer-events: all; }
+    .btn-top:hover { transform: scale(1.1); }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+    .site-footer {
+      background: #1a1a1a; color: #aaa;
+      padding: 14px 20px 80px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .footer-logo {
+      font-size: 18px; font-weight: 900; font-style: italic;
+      color: var(--pink); margin-bottom: 4px;
+    }
+    .footer-copy { color: #666; font-size: 11px; }
+
+    /* =====================================================
+       SAKURA BRANCHES
+    ===================================================== */
+    .sakura-bg {
+      position: fixed; inset: 0;
+      pointer-events: none; z-index: 0;
+      overflow: hidden;
+    }
+    .sakura-br {
+      position: absolute;
+      opacity: 0.09;
+    }
+    .sakura-br-tr {
+      top: -20px; right: -20px;
+      width: 320px; height: 420px;
+    }
+    .sakura-br-bl {
+      bottom: 60px; left: -30px;
+      width: 260px; height: 360px;
+      transform: scaleX(-1) rotate(15deg);
+    }
+    .sakura-br-mid {
+      top: 40%; right: -40px;
+      width: 180px; height: 250px;
+      opacity: 0.06;
+      transform: rotate(-20deg);
+    }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 900px) {
+      .model-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .pc-header { display: none; }
+      .pc-nav     { display: none; }
+      .sp-header  { display: block; }
+      .mob-cta    { display: block; }
+      .btn-top    { bottom: 74px; }
+      .page-wrap  { padding: 10px 8px 76px; }
+      .model-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .card-name  { font-size: 11px; }
+      .card-meas  { font-size: 9px; }
+      .hero-banner { padding: 18px 14px; }
+      .hero-title  { font-size: 20px; }
+      .hero-deco   { font-size: 38px; }
+    }
+
+    @media (max-width: 520px) {
+      .model-grid { grid-template-columns: repeat(2, 1fr); gap: 5px; }
+      .sec-head   { font-size: 13px; padding: 8px 12px; }
+      .hero-deco  { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SAKURA BACKGROUND -->
+  <div class="sakura-bg" aria-hidden="true">
+    <!-- Top-right branch -->
+    <svg class="sakura-br sakura-br-tr" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M280 10 C240 70 190 130 160 190 C130 250 100 310 60 390" stroke="#c05070" stroke-width="4" stroke-linecap="round"/>
+      <path d="M220 70 C195 88 165 97 138 102" stroke="#c05070" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M163 188 C140 202 115 210 90 213" stroke="#c05070" stroke-width="2" stroke-linecap="round"/>
+      <path d="M178 145 C200 133 218 120 232 105" stroke="#c05070" stroke-width="2" stroke-linecap="round"/>
+      <path d="M112 308 C90 320 68 325 48 326" stroke="#c05070" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="translate(138,102)">
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(0)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(72)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#d4607a" transform="rotate(144)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(216)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#d4607a" transform="rotate(288)translate(0,-9)"/>
+        <circle r="4" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(232,105)">
+        <ellipse rx="4" ry="7" fill="#e8829a" transform="rotate(15)translate(0,-8)"/>
+        <ellipse rx="4" ry="7" fill="#e8829a" transform="rotate(87)translate(0,-8)"/>
+        <ellipse rx="4" ry="7" fill="#d4607a" transform="rotate(159)translate(0,-8)"/>
+        <ellipse rx="4" ry="7" fill="#e8829a" transform="rotate(231)translate(0,-8)"/>
+        <ellipse rx="4" ry="7" fill="#d4607a" transform="rotate(303)translate(0,-8)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(90,213)">
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(5)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(77)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#d4607a" transform="rotate(149)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(221)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#d4607a" transform="rotate(293)translate(0,-8)"/>
+        <circle r="3.5" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(48,326)">
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(10)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(82)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(154)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(226)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(298)translate(0,-7)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(278,12)">
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(20)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(92)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(164)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(236)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(308)translate(0,-7)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+      <ellipse cx="200" cy="160" rx="3" ry="5" fill="#e8829a" opacity="0.5" transform="rotate(-30,200,160)"/>
+      <ellipse cx="125" cy="250" rx="3" ry="4" fill="#e8829a" opacity="0.4" transform="rotate(20,125,250)"/>
+      <ellipse cx="155" cy="350" rx="3" ry="5" fill="#e8829a" opacity="0.35" transform="rotate(-15,155,350)"/>
+    </svg>
+    <!-- Bottom-left branch -->
+    <svg class="sakura-br sakura-br-bl" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M280 10 C240 70 190 130 160 190 C130 250 100 310 60 390" stroke="#c05070" stroke-width="4" stroke-linecap="round"/>
+      <path d="M220 70 C195 88 165 97 138 102" stroke="#c05070" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M163 188 C140 202 115 210 90 213" stroke="#c05070" stroke-width="2" stroke-linecap="round"/>
+      <path d="M112 308 C90 320 68 325 48 326" stroke="#c05070" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="translate(138,102)">
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(0)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(72)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#d4607a" transform="rotate(144)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#e8829a" transform="rotate(216)translate(0,-9)"/>
+        <ellipse rx="5" ry="8" fill="#d4607a" transform="rotate(288)translate(0,-9)"/>
+        <circle r="4" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(90,213)">
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(5)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(77)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#d4607a" transform="rotate(149)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#e8829a" transform="rotate(221)translate(0,-8)"/>
+        <ellipse rx="5" ry="7" fill="#d4607a" transform="rotate(293)translate(0,-8)"/>
+        <circle r="3.5" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(48,326)">
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(10)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(82)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(154)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(226)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(298)translate(0,-7)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+    </svg>
+    <!-- Mid-right branch -->
+    <svg class="sakura-br sakura-br-mid" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg" fill="none">
+      <path d="M190 10 C160 60 130 110 110 160 C90 210 70 250 40 278" stroke="#c05070" stroke-width="3" stroke-linecap="round"/>
+      <path d="M150 60 C130 74 108 81 88 85" stroke="#c05070" stroke-width="2" stroke-linecap="round"/>
+      <path d="M115 155 C95 167 74 173 54 176" stroke="#c05070" stroke-width="1.5" stroke-linecap="round"/>
+      <g transform="translate(88,85)">
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(0)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(72)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(144)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(216)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(288)translate(0,-7)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+      <g transform="translate(54,176)">
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(8)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(80)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(152)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#e8829a" transform="rotate(224)translate(0,-7)"/>
+        <ellipse rx="4" ry="6" fill="#d4607a" transform="rotate(296)translate(0,-7)"/>
+        <circle r="3" fill="#f8d0dc"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- ==================== DESKTOP HEADER ==================== -->
+  <header class="pc-header">
+    <div class="header-inner">
+      <div class="logo-block">
+        <div class="logo-name">T7 TOKYO</div>
+        <div class="logo-sub" data-i18n="tagline">東京プレミアムモデル</div>
+      </div>
+      <div class="header-right">
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="ja" onclick="setLang('ja')">JP</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== DESKTOP NAV ==================== -->
+  <nav class="pc-nav">
+    <div class="nav-contacts">
+      <span class="nc-home">
+        <svg class="nc-logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C10.5 4.5 8 6 5 6c3 0 5.5 1.5 6 4.5C11.5 7.5 14 6 17 6c-3 0-5 1.5-5 4 0-2.5-2-4-5-4 2.5 0 4.5 1.5 5 4.5C12.5 8 15 6.5 18 7c-2.5-.5-4 1-4.5 3.5C14 7.5 16.5 6 20 6c-3.5 0-6 2-6 5 0-2.5-1-4.5-2-9z"/>
+        </svg>
+        T7 TOKYO
+      </span>
+      <div class="nc-divider"></div>
+      <a class="nc-btn nc-channel" href="https://t.me/YOUR_CHANNEL" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-i18n="fav_models">⭐ 厳選モデル</span>
+      </a>
+      <a class="nc-btn nc-tg" href="https://t.me/YOUR_TG" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-i18n="nav_tg">テレグラム</span>
+      </a>
+      <a class="nc-btn nc-line" href="https://line.me/R/ti/p/@YOUR_LINE" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.07 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        <span data-i18n="nav_line">LINE</span>
+      </a>
+      <a class="nc-btn nc-wa" href="https://wa.me/YOUR_NUMBER" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        <span data-i18n="nav_wa">ワッツアップ</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ==================== MOBILE HEADER ==================== -->
+  <header class="sp-header">
+    <div class="sp-header-top">
+      <div class="sp-header-left">
+        <div class="sp-logo">
+          <svg class="sp-logo-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C10.5 4.5 8 6 5 6c3 0 5.5 1.5 6 4.5C11.5 7.5 14 6 17 6c-3 0-5 1.5-5 4 0-2.5-2-4-5-4 2.5 0 4.5 1.5 5 4.5C12.5 8 15 6.5 18 7c-2.5-.5-4 1-4.5 3.5C14 7.5 16.5 6 20 6c-3.5 0-6 2-6 5 0-2.5-1-4.5-2-9z"/>
+          </svg>
+          T7 TOKYO
+        </div>
+        <div class="sp-lang">
+          <button class="lang-btn active" data-lang="ja" onclick="setLang('ja')">JP</button>
+          <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        </div>
+      </div>
+      <button class="sp-menu-btn" onclick="openMenu()">
+        <span class="b"></span><span class="b"></span><span class="b"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== OVERLAY MENU ==================== -->
+  <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+  <div class="side-menu" id="sideMenu">
+    <div class="sm-head">
+      <span class="title">T7 TOKYO</span>
+      <button class="sm-close" onclick="closeMenu()">✕</button>
+    </div>
+    <div class="sm-btns">
+      <a class="sm-btn" href="https://t.me/YOUR_CHANNEL" target="_blank" style="background:#e40057">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-i18n="fav_models">⭐ 厳選モデル</span>
+      </a>
+      <a class="sm-btn" href="https://t.me/YOUR_TG" target="_blank" style="background:#42A5F5">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-i18n="nav_tg">テレグラム</span>
+      </a>
+      <a class="sm-btn" href="https://line.me/R/ti/p/@YOUR_LINE" target="_blank" style="background:#66BB6A">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.07 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        <span data-i18n="nav_line">LINE</span>
+      </a>
+      <a class="sm-btn" href="https://wa.me/YOUR_NUMBER" target="_blank" style="background:#2E7D32">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        <span data-i18n="nav_wa">ワッツアップ</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <div class="page-wrap">
+
+    <!-- Hero Banner -->
+    <div class="hero-banner">
+      <div class="hero-text">
+        <div class="hero-title">T7 TOKYO</div>
+        <div class="hero-sub" data-i18n="tagline">東京プレミアムモデル</div>
+        <div class="hero-tag" data-i18n="hero_tag">TOKYO PREMIUM MODELS</div>
+      </div>
+      <div class="hero-deco">🌸</div>
+    </div>
+
+    <!-- Schedule Section -->
+    <div class="sec-head" data-i18n="schedule_title">本日の出勤スケジュール SCHEDULE</div>
+
+    <div class="loader" id="loader"><div class="spinner"></div></div>
+    <div class="model-grid" id="grid"></div>
+
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-logo">T7 TOKYO</div>
+    <div class="footer-copy" data-i18n="footer_copy">© 2024 T7 TOKYO. All Rights Reserved.</div>
+  </footer>
+
+  <!-- ==================== MOBILE BOTTOM CTA ==================== -->
+  <div class="mob-cta">
+    <div class="mob-cta-inner">
+      <a href="https://t.me/YOUR_TG" class="mob-cta-btn mob-cta-tg">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <span data-i18n="nav_tg">テレグラム</span>
+      </a>
+      <a href="https://line.me/R/ti/p/@YOUR_LINE" class="mob-cta-btn mob-cta-line">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.07 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+        <span data-i18n="nav_line">LINE</span>
+      </a>
+      <a href="https://wa.me/YOUR_NUMBER" class="mob-cta-btn mob-cta-wa">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        <span data-i18n="nav_wa">ワッツアップ</span>
+      </a>
+    </div>
+  </div>
+
+  <button class="btn-top" id="btnTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://mqbsyxvebsjntbzuvtfu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xYnN5eHZlYnNqbnRienV2dGZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3OTE3MjQsImV4cCI6MjA4ODM2NzcyNH0.rPjPAspwjRBE3js_606VozG8wjpM6QHcUJwl2NZzZd8';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const numSeeds = [64,91,42,1062,1025,1041,1074,1031,1048,55,78,84];
+
+    /* ---- Translations ---- */
+    const T = {
+      ja: {
+        tagline:        '東京プレミアムモデル',
+        hero_tag:       'TOKYO PREMIUM MODELS',
+        fav_models:     '⭐ 厳選モデル',
+        badge_photo:    '写メ',
+        badge_new:      'NewCast',
+        tier_luxury:    'ラグジュアリー',
+        tier_premium:   'プレミアム',
+        tier_standard:  'スタンダード',
+        news_text:      'T7 TOKYOへようこそ！新人キャスト続々入店中！お気軽にご予約ください。',
+        news_more:      '一覧 →',
+        event_text:     '今日のイベント・割引情報はこちら！お得なキャンペーン実施中！',
+        event_more:     '全て見る →',
+        nav_tg:         'テレグラム',
+        nav_line:       'LINE',
+        nav_wa:         'ワッツアップ',
+        status_avail:   '受付中',
+        status_duty:    '出勤中',
+        status_limited: '限定',
+        status_vip:     'VIP',
+        status_booked:  '予約済',
+        schedule_title: '本日の出勤スケジュール SCHEDULE',
+        empty_title:    '本日の出勤情報はございません',
+        empty_sub:      'モデルは管理者パネルで追加できます',
+        footer_hours:   '受付時間：9:00 ～ 翌4:00 　|　 東京都内全域派遣',
+        footer_copy:    '© 2024 T7 TOKYO. All Rights Reserved.',
+      },
+      en: {
+        tagline:        'Tokyo Premium Models',
+        hero_tag:       'TOKYO PREMIUM MODELS',
+        fav_models:     '⭐ Featured Models',
+        badge_photo:    'Photo',
+        badge_new:      'NewCast',
+        tier_luxury:    'Luxury',
+        tier_premium:   'Premium',
+        tier_standard:  'Standard',
+        news_text:      'Welcome to T7 TOKYO! New models joining daily. Book with ease!',
+        news_more:      'More →',
+        event_text:     "Today's events & discounts — special campaigns running now!",
+        event_more:     'See all →',
+        nav_tg:         'Telegram',
+        nav_line:       'LINE',
+        nav_wa:         'WhatsApp',
+        status_avail:   'Available',
+        status_duty:    'On Duty',
+        status_limited: 'Limited',
+        status_vip:     'VIP Only',
+        status_booked:  'Reserved',
+        schedule_title: "Today's Schedule",
+        empty_title:    'No schedule for today',
+        empty_sub:      'Models can be added in the admin panel',
+        footer_hours:   'Hours: 9:00 AM – 4:00 AM  |  Delivery across all of Tokyo',
+        footer_copy:    '© 2024 T7 TOKYO. All Rights Reserved.',
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'ja';
+
+    /* Tier mapping: status_color → tier key + badge class */
+    const tierMap = {
+      's-pink':   { key: 'tier_luxury',   cls: 'bdg-luxury' },
+      's-dark':   { key: 'tier_luxury',   cls: 'bdg-luxury' },
+      's-teal':   { key: 'tier_premium',  cls: 'bdg-premium' },
+      's-orange': { key: 'tier_standard', cls: 'bdg-standard' },
+      's-sold':   { key: 'tier_standard', cls: 'bdg-standard' },
+    };
+
+    /* Status color → translation key */
+    const statusKeyMap = {
+      's-pink':   'status_avail',
+      's-dark':   'status_vip',
+      's-teal':   'status_duty',
+      's-orange': 'status_limited',
+      's-sold':   'status_booked',
+    };
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      /* Static data-i18n elements */
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+      });
+      /* Dynamic card badges */
+      document.querySelectorAll('[data-badge]').forEach(el => {
+        const key = el.dataset.badge;
+        if (T[lang][key] !== undefined) el.textContent = T[lang][key];
+      });
+      /* Status text by color */
+      document.querySelectorAll('[data-status-color]').forEach(el => {
+        const color = el.dataset.statusColor;
+        const key = statusKeyMap[color];
+        el.textContent = (key && T[lang][key]) ? T[lang][key] : el.dataset.statusJa;
+      });
+      /* Lang buttons */
+      document.querySelectorAll('.lang-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.lang === lang)
+      );
+    }
+
+    /* ---- Menu ---- */
+    function openMenu()  {
+      document.getElementById('sideMenu').classList.add('on');
+      document.getElementById('overlay').classList.add('on');
+    }
+    function closeMenu() {
+      document.getElementById('sideMenu').classList.remove('on');
+      document.getElementById('overlay').classList.remove('on');
+    }
+
+    /* ---- Scroll top ---- */
+    const btnTop = document.getElementById('btnTop');
+    window.addEventListener('scroll', () => btnTop.classList.toggle('show', scrollY > 300));
+
+    /* ---- Card entrance observer ---- */
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+
+    /* ---- Load models ---- */
+    async function init() {
+      const { data: rows, error } = await sb
+        .from('models')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      document.getElementById('loader').style.display = 'none';
+
+      const grid = document.getElementById('grid');
+
+      if (error || !rows?.length) {
+        const lang = currentLang;
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-petals">
+              <span>🌸</span><span>🌺</span><span>🌸</span><span>🌺</span><span>🌸</span>
+            </div>
+            <div class="et">${T[lang].empty_title}</div>
+            <div class="es">${T[lang].empty_sub} — <a href="admin.html">admin</a></div>
+          </div>`;
+        return;
+      }
+
+      rows.forEach((row, i) => {
+        const imgSrc = row.photo_url || `https://picsum.photos/seed/${numSeeds[i] || i+10}/300/400`;
+
+        const card = document.createElement('div');
+        card.className = 'model-card';
+        card.style.cssText = 'opacity:0;transform:translateY(14px);transition:opacity 0.45s ease,transform 0.45s ease,box-shadow 0.25s,transform 0.2s';
+        card.style.transitionDelay = `${Math.min(i, 8) * 55}ms`;
+        card.onclick = () => location.href = `profile.html?id=${row.id}`;
+
+        card.innerHTML = `
+          <div class="card-top">${row.schedule}</div>
+          <div class="card-photo">
+            <img src="${imgSrc}" alt="${row.name}" loading="lazy"
+                 onerror="this.src='https://picsum.photos/seed/${i+10}/300/400'">
+            ${row.is_new    ? `<span class="bdg bdg-new" data-badge="badge_new">${T[currentLang].badge_new}</span>` : ''}
+            ${row.has_photo ? `<span class="bdg bdg-photo" data-badge="badge_photo">${T[currentLang].badge_photo}</span>` : ''}
+            <span class="bdg bdg-status" data-status-color="${row.status_color}" data-status-ja="${row.status}">${statusKeyMap[row.status_color] && T[currentLang][statusKeyMap[row.status_color]] ? T[currentLang][statusKeyMap[row.status_color]] : row.status}</span>
+            ${tierMap[row.status_color] ? `<span class="bdg ${tierMap[row.status_color].cls}" data-badge="${tierMap[row.status_color].key}">${T[currentLang][tierMap[row.status_color].key]}</span>` : ''}
+          </div>
+          <div class="card-info">
+            <div class="card-name">${row.name}(${row.age})</div>
+            <div class="card-meas">T${row.height}-${row.bust}<span class="cup">${row.cup}</span>-${row.waist}-${row.hips}</div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+        io.observe(card);
+      });
+    }
+
+    /* ---- Boot ---- */
+    setLang(currentLang);
+    init();
+  </script>
+</body>
+</html>
