@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #f4f6f9; min-height: 100vh; }
+
+    /* ===== LOGIN ===== */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #f48fb1, #e91e8c, #c2185b);
+    }
+    .login-card {
+      background: white; border-radius: 12px;
+      padding: 40px 36px; width: 320px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2); text-align: center;
+    }
+    .login-logo { font-size: 26px; font-weight: 900; font-style: italic; color: #e91e8c; margin-bottom: 6px; }
+    .login-sub  { font-size: 13px; color: #888; margin-bottom: 28px; }
+    .login-card input[type="password"] {
+      width: 100%; padding: 12px 14px;
+      border: 2px solid #f0f0f0; border-radius: 8px;
+      font-size: 15px; outline: none;
+      transition: border-color 0.2s; margin-bottom: 14px;
+    }
+    .login-card input[type="password"]:focus { border-color: #e91e8c; }
+    .btn-login {
+      width: 100%; padding: 13px;
+      background: #e91e8c; color: white;
+      border: none; border-radius: 8px;
+      font-size: 15px; font-weight: bold; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-login:hover  { background: #c2185b; }
+    .btn-login:active { transform: scale(0.97); }
+    .login-error { color: #e53935; font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+    /* ===== ADMIN PANEL ===== */
+    #adminPanel { display: none; }
+
+    .admin-header {
+      background: white; border-bottom: 2px solid #e91e8c;
+      padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .admin-logo { font-size: 20px; font-weight: 900; font-style: italic; color: #e91e8c; }
+    .admin-logo span { color: #555; font-size: 14px; font-style: normal; margin-left: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn-logout {
+      padding: 8px 16px; background: #f5f5f5;
+      border: 1px solid #ddd; border-radius: 6px;
+      font-size: 13px; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-logout:hover { background: #fce4ec; color: #e91e8c; }
+    .btn-preview {
+      padding: 8px 16px; background: #e91e8c; color: white;
+      border: none; border-radius: 6px;
+      font-size: 13px; cursor: pointer; transition: background 0.15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-preview:hover { background: #c2185b; }
+
+    /* ===== CONTENT ===== */
+    .admin-content { padding: 24px; max-width: 1000px; margin: 0 auto; }
+    .page-title {
+      font-size: 22px; font-weight: 900; color: #333;
+      margin-bottom: 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .btn-add {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 20px; background: #e91e8c; color: white;
+      border: none; border-radius: 8px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-add:hover  { background: #c2185b; }
+    .btn-add:active { transform: scale(0.97); }
+
+    /* ===== STATS ===== */
+    .stats-row { display: flex; gap: 12px; margin-bottom: 22px; flex-wrap: wrap; }
+    .stat-card {
+      flex: 1; min-width: 120px;
+      background: white; border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-left: 4px solid #e91e8c;
+    }
+    .stat-card.teal   { border-left-color: #00bcd4; }
+    .stat-card.orange { border-left-color: #ff7043; }
+    .stat-num   { font-size: 26px; font-weight: 900; color: #333; }
+    .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+
+    /* ===== TABLE ===== */
+    .table-wrap {
+      background: white; border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden;
+    }
+    .table-header {
+      padding: 14px 18px; border-bottom: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .table-header h3 { font-size: 15px; color: #333; }
+    .search-input {
+      padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 6px;
+      font-size: 13px; outline: none; transition: border-color 0.2s; width: 200px;
+    }
+    .search-input:focus { border-color: #e91e8c; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: #fafafa; padding: 11px 14px;
+      text-align: left; font-size: 12px; color: #888;
+      font-weight: 600; border-bottom: 1px solid #f0f0f0; white-space: nowrap;
+    }
+    td { padding: 10px 14px; border-bottom: 1px solid #f8f8f8; font-size: 13px; color: #333; vertical-align: middle; }
+    tr:hover td { background: #fef6fa; }
+    tr:last-child td { border-bottom: none; }
+
+    .model-photo-cell {
+      width: 44px; height: 58px; object-fit: cover;
+      border-radius: 4px; background: #f0f0f0; display: block;
+    }
+    .status-badge {
+      display: inline-block; padding: 3px 8px; border-radius: 20px;
+      font-size: 11px; font-weight: bold; color: white; white-space: nowrap;
+    }
+    .sb-pink   { background: #e91e8c; }
+    .sb-teal   { background: #00bcd4; }
+    .sb-dark   { background: #c62828; }
+    .sb-orange { background: #ff9c00; }
+    .sb-sold   { background: #455a64; }
+
+    .new-tag {
+      display: inline-block; padding: 2px 6px;
+      background: #e91e8c; color: white;
+      border-radius: 3px; font-size: 10px; font-weight: bold; margin-left: 4px;
+    }
+    .action-btns { display: flex; gap: 6px; }
+    .btn-edit, .btn-delete {
+      width: 30px; height: 30px;
+      border: none; border-radius: 6px;
+      cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .btn-edit   { background: #e3f2fd; color: #1976d2; }
+    .btn-delete { background: #fce4ec; color: #e53935; }
+    .btn-edit:hover, .btn-delete:hover { opacity: 0.75; transform: scale(1.1); }
+
+    .empty-row td { text-align: center; padding: 40px; color: #aaa; font-size: 14px; }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 500;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: white; border-radius: 12px;
+      width: 100%; max-width: 520px;
+      max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes popIn { from { opacity:0; transform:scale(0.88); } to { opacity:1; transform:scale(1); } }
+
+    .modal-head {
+      background: #e91e8c; color: white;
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-radius: 12px 12px 0 0;
+      position: sticky; top: 0; z-index: 1;
+    }
+    .modal-head h2 { font-size: 17px; }
+    .modal-close {
+      background: rgba(255,255,255,0.2); border: none;
+      color: white; width: 30px; height: 30px;
+      border-radius: 50%; font-size: 17px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .modal-body { padding: 20px; }
+
+    .form-row { display: flex; gap: 12px; margin-bottom: 14px; }
+    .form-row.single { flex-direction: column; }
+    .form-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12px; color: #555; font-weight: bold; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 10px 12px; border: 1.5px solid #e0e0e0; border-radius: 7px;
+      font-size: 13px; outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: #e91e8c; }
+
+    /* ===== FORM SECTIONS ===== */
+    .form-section { margin-bottom: 16px; }
+    .section-title {
+      font-size: 11px; font-weight: 800; color: #e91e8c;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 10px; padding-bottom: 5px;
+      border-bottom: 1.5px solid #fce4ec;
+    }
+
+    /* ===== PHOTO GRID ===== */
+    .photo-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 6px; margin-top: 8px;
+    }
+    .photo-thumb {
+      position: relative; cursor: pointer; border-radius: 6px;
+      overflow: hidden; border: 2px solid #e0e0e0;
+      transition: border-color 0.18s;
+    }
+    .photo-thumb:hover { border-color: #e91e8c; }
+    .photo-thumb.main-photo { border-color: #e91e8c; }
+    .photo-thumb img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+    .thumb-badge {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.55); color: white;
+      font-size: 9px; font-weight: bold; text-align: center;
+      padding: 3px 0; transition: background 0.15s;
+    }
+    .photo-thumb.main-photo .thumb-badge { background: #e91e8c; }
+    .thumb-del {
+      position: absolute; top: 3px; right: 3px;
+      background: rgba(0,0,0,0.6); color: white;
+      border: none; border-radius: 50%; width: 18px; height: 18px;
+      font-size: 10px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; line-height: 1;
+    }
+
+    /* ===== UPLOAD ZONE ===== */
+    .upload-zone {
+      border: 2px dashed #e0e0e0; border-radius: 8px;
+      padding: 12px; text-align: center;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    }
+    .upload-zone:hover { border-color: #e91e8c; background: #fff5f8; }
+    .upload-zone.has-file { border-color: #e91e8c; background: #fff0f6; }
+    .upload-icon { font-size: 20px; }
+    .upload-hint { font-size: 11px; color: #999; margin-top: 2px; }
+    .upload-name { font-size: 11px; color: #e91e8c; font-weight: bold; margin-top: 3px; word-break: break-all; }
+    .up-spinner {
+      width: 12px; height: 12px;
+      border: 2px solid #f8bbd0; border-top-color: #e91e8c;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      display: inline-block; vertical-align: middle; margin-right: 5px;
+    }
+
+    /* ===== STATUS COLOR PREVIEW ===== */
+    .status-preview {
+      display: inline-block; padding: 3px 10px; border-radius: 3px;
+      font-size: 11px; font-weight: bold; color: white; margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    /* ===== PRICE GRID ===== */
+    .price-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    }
+    .price-item label { font-size: 11px; color: #888; font-weight: 700; display: block; margin-bottom: 4px; text-align: center; }
+    .price-item input {
+      width: 100%; padding: 8px 4px; border: 1.5px solid #e0e0e0;
+      border-radius: 6px; font-size: 12px; text-align: center;
+      outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    .price-item input:focus { border-color: #e91e8c; }
+
+    .checkbox-row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .checkbox-label { display: flex; align-items: center; gap: 7px; font-size: 13px; color: #333; cursor: pointer; }
+    .checkbox-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: #e91e8c; }
+
+    .video-preview-wrap video {
+      width: 100%; max-height: 120px; border-radius: 6px;
+      background: #000; margin-top: 6px; display: none;
+    }
+
+    .modal-footer {
+      padding: 16px 20px; border-top: 1px solid #f0f0f0;
+      display: flex; gap: 10px; justify-content: flex-end;
+    }
+    .btn-cancel {
+      padding: 10px 20px; background: #f5f5f5;
+      border: 1px solid #ddd; border-radius: 8px;
+      font-size: 14px; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-cancel:hover { background: #e0e0e0; }
+    .btn-save {
+      padding: 10px 24px; background: #e91e8c; color: white;
+      border: none; border-radius: 8px;
+      font-size: 14px; font-weight: bold; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-save:hover  { background: #c2185b; }
+    .btn-save:active { transform: scale(0.97); }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #333; color: white;
+      padding: 12px 22px; border-radius: 8px;
+      font-size: 14px; font-weight: bold;
+      z-index: 1000; opacity: 0;
+      transition: opacity 0.3s, transform 0.3s; white-space: nowrap;
+    }
+    .toast.show  { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.green { background: #43a047; }
+    .toast.red   { background: #e53935; }
+
+    /* ===== CONFIRM ===== */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 600;
+      align-items: center; justify-content: center;
+    }
+    .confirm-overlay.open { display: flex; }
+    .confirm-box {
+      background: white; border-radius: 10px;
+      padding: 28px 28px 20px; max-width: 320px; width: 90%;
+      text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      animation: popIn 0.25s ease;
+    }
+    .confirm-box h3 { font-size: 17px; color: #333; margin-bottom: 8px; }
+    .confirm-box p  { font-size: 13px; color: #888; margin-bottom: 20px; }
+    .confirm-btns   { display: flex; gap: 10px; justify-content: center; }
+    .confirm-btns button {
+      padding: 10px 22px; border-radius: 7px;
+      font-size: 14px; cursor: pointer; font-weight: bold;
+      border: none; transition: opacity 0.15s;
+    }
+    .confirm-btns button:hover { opacity: 0.8; }
+    .conf-cancel { background: #f0f0f0; color: #333; }
+    .conf-ok     { background: #e53935; color: white; }
+
+    /* ===== LOADER ===== */
+    .tbl-loader {
+      text-align: center; padding: 40px; color: #888; font-size: 14px;
+    }
+    .mini-spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 3px solid #f8bbd0; border-top-color: #e91e8c;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">Model Agency</div>
+    <div class="login-sub">Admin Panel</div>
+    <input type="password" id="passInput" placeholder="Password" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-login" onclick="login()">Login</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel">
+  <header class="admin-header">
+    <div class="admin-logo">Model Agency <span>Admin</span></div>
+    <div class="header-actions">
+      <a href="index.html" target="_blank" class="btn-preview">👁 View Site</a>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-content">
+    <div class="page-title">
+      <span>Models Management</span>
+      <button class="btn-add" onclick="openAdd()">＋ Add Model</button>
+    </div>
+
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card"><div class="stat-num">—</div><div class="stat-label">Total Models</div></div>
+      <div class="stat-card teal"><div class="stat-num">—</div><div class="stat-label">Available Now</div></div>
+      <div class="stat-card orange"><div class="stat-num">—</div><div class="stat-label">New Cast</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>All Models</h3>
+        <input class="search-input" type="text" placeholder="🔍 Search..." oninput="filterTable(this.value)">
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Name</th>
+            <th>Measurements</th>
+            <th>Schedule</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="6" class="tbl-loader"><span class="mini-spinner"></span> Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ADD/EDIT ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="modalTitle">Add Model</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- ① PHOTOS -->
+      <div class="form-section">
+        <div class="section-title">📸 Фото</div>
+        <div class="upload-zone" id="photoZone" onclick="document.getElementById('fPhotosMulti').click()">
+          <input type="file" id="fPhotosMulti" accept="image/*" multiple style="display:none" onchange="onMultiPhotoChange(this)">
+          <div class="upload-icon">📷</div>
+          <div class="upload-hint">Нажмите — можно выбрать несколько сразу</div>
+          <div id="photoUploadStatus" style="display:none;margin-top:4px;font-size:11px;color:#e91e8c"></div>
+        </div>
+        <div class="photo-grid" id="photoGrid"></div>
+        <input type="hidden" id="fPhoto">
+      </div>
+
+      <!-- ② VIDEO -->
+      <div class="form-section">
+        <div class="section-title">🎬 Видео (опционально)</div>
+        <div class="upload-zone" id="videoZone" onclick="document.getElementById('fVideoFile').click()">
+          <input type="file" id="fVideoFile" accept="video/*" style="display:none" onchange="onVideoFileChange(this)">
+          <div class="upload-icon">🎬</div>
+          <div class="upload-hint" id="videoHint">Нажмите для загрузки видео</div>
+          <div class="upload-name" id="videoName" style="display:none"></div>
+        </div>
+        <input type="text" id="fVideo" placeholder="Или вставьте ссылку на видео"
+          oninput="previewVideo(this.value)"
+          style="margin-top:8px;width:100%;padding:8px 10px;border:1.5px solid #e0e0e0;border-radius:6px;font-size:12px;outline:none;font-family:inherit">
+        <video id="videoPreviewEl" controls></video>
+      </div>
+
+      <!-- ③ ОСНОВНЫЕ ДАННЫЕ -->
+      <div class="form-section">
+        <div class="section-title">👤 Основное</div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2">
+            <label>Имя *</label>
+            <input type="text" id="fName" placeholder="まどか">
+          </div>
+          <div class="form-group">
+            <label>Возраст *</label>
+            <select id="fAge"></select>
+          </div>
+          <div class="form-group">
+            <label>Район</label>
+            <select id="fLocation">
+              <option value="新宿">新宿 Shinjuku</option>
+              <option value="渋谷">渋谷 Shibuya</option>
+              <option value="六本木">六本木 Roppongi</option>
+              <option value="銀座">銀座 Ginza</option>
+              <option value="池袋">池袋 Ikebukuro</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ④ ПАРАМЕТРЫ -->
+      <div class="form-section">
+        <div class="section-title">📏 Параметры</div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Рост (см)</label>
+            <select id="fT"></select>
+          </div>
+          <div class="form-group">
+            <label>Грудь (см)</label>
+            <select id="fB"></select>
+          </div>
+          <div class="form-group" style="max-width:80px">
+            <label>Размер</label>
+            <select id="fCup">
+              <option>A</option><option>B</option><option selected>C</option>
+              <option>D</option><option>E</option><option>F</option>
+              <option>G</option><option>H</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Талия (см)</label>
+            <select id="fW"></select>
+          </div>
+          <div class="form-group">
+            <label>Бёдра (см)</label>
+            <select id="fH"></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑤ СТАТУС -->
+      <div class="form-section">
+        <div class="section-title">🏷 Статус и расписание</div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2">
+            <label>Расписание</label>
+            <select id="fSchedule" onchange="onScheduleChange(this)">
+              <option value="24/7">24/7</option>
+              <option value="10:00〜翌3:00">10:00〜翌3:00</option>
+              <option value="12:00〜24:00">12:00〜24:00</option>
+              <option value="15:00〜23:00">15:00〜23:00</option>
+              <option value="17:00〜翌4:00">17:00〜翌4:00</option>
+              <option value="19:00〜翌5:00">19:00〜翌5:00</option>
+              <option value="custom">Другое...</option>
+            </select>
+            <input type="text" id="fScheduleCustom" placeholder="Введите расписание..."
+              style="display:none;margin-top:6px;padding:8px 10px;border:1.5px solid #e91e8c;border-radius:6px;font-size:13px;outline:none;width:100%;font-family:inherit">
+          </div>
+          <div class="form-group">
+            <label>Статус <span id="statusPreviewBadge" class="status-preview" style="background:#e91e8c">受付中</span></label>
+            <select id="fStatusColor" onchange="onStatusColorChange(this)">
+              <option value="s-pink">🟣 Доступна (受付中)</option>
+              <option value="s-teal">🔵 На смене (出勤中)</option>
+              <option value="s-dark">🔴 VIP только</option>
+              <option value="s-orange">🟠 Ограничено (限定)</option>
+              <option value="s-sold">⚫ Забронировано (予約済)</option>
+            </select>
+            <input type="hidden" id="fStatus">
+          </div>
+        </div>
+      </div>
+
+      <!-- ⑥ БЕЙДЖИ -->
+      <div class="form-section">
+        <div class="section-title">🎖 Бейджи</div>
+        <div class="checkbox-row">
+          <label class="checkbox-label">
+            <input type="checkbox" id="fIsNew"> ✨ Новенькая (New Cast)
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" id="fHasPhoto"> 📸 Есть фото (写メ)
+          </label>
+        </div>
+      </div>
+
+      <!-- ⑦ ЦЕНЫ -->
+      <div class="form-section">
+        <div class="section-title">💴 Прайс-лист</div>
+        <div class="price-grid">
+          <div class="price-item"><label>60 мин</label><input type="number" id="p60" placeholder="30000"></div>
+          <div class="price-item"><label>75 мин</label><input type="number" id="p75" placeholder="35000"></div>
+          <div class="price-item"><label>100 мин</label><input type="number" id="p100" placeholder="47000"></div>
+          <div class="price-item"><label>120 мин</label><input type="number" id="p120" placeholder="60000"></div>
+          <div class="price-item"><label>180 мин</label><input type="number" id="p180" placeholder="90000"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveModel()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM DELETE ===== -->
+<div class="confirm-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <h3>Delete Model?</h3>
+    <p id="confirmText">This action cannot be undone.</p>
+    <div class="confirm-btns">
+      <button class="conf-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="conf-ok"     onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://mqbsyxvebsjntbzuvtfu.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1xYnN5eHZlYnNqbnRienV2dGZ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3OTE3MjQsImV4cCI6MjA4ODM2NzcyNH0.rPjPAspwjRBE3js_606VozG8wjpM6QHcUJwl2NZzZd8';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const PASSWORD = 'admin';
+  let models     = [];
+  let editId     = null;
+  let deleteId   = null;
+
+  // Photos state
+  let photosArr    = [];   // [{ url: string, file: File|null }]
+  let mainPhotoIdx = 0;
+
+  // Status color map
+  const STATUS_MAP = {
+    's-pink':   { text: '受付中',  bg: '#e91e8c' },
+    's-teal':   { text: '出勤中',  bg: '#00bcd4' },
+    's-dark':   { text: 'VIPのみ', bg: '#c62828' },
+    's-orange': { text: '限定',    bg: '#ff9c00' },
+    's-sold':   { text: '予約済',  bg: '#455a64' },
+  };
+
+  // Predefined schedules list
+  const SCHEDULES = ['24/7','10:00〜翌3:00','12:00〜24:00','15:00〜23:00','17:00〜翌4:00','19:00〜翌5:00'];
+
+  // ── Init selects ──
+  function generateSelect(id, min, max, suffix) {
+    suffix = suffix || '';
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = Array.from({ length: max - min + 1 }, function(_, i) {
+      const v = min + i;
+      return '<option value="' + v + '">' + v + suffix + '</option>';
+    }).join('');
+  }
+
+  function initSelects() {
+    generateSelect('fAge', 18, 45, '歳');
+    generateSelect('fT',  148, 185, 'cm');
+    generateSelect('fB',   72, 105, 'cm');
+    generateSelect('fW',   48,  80, 'cm');
+    generateSelect('fH',   78, 105, 'cm');
+  }
+
+  // ── Login ──
+  function login() {
+    if (document.getElementById('passInput').value === PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display  = 'block';
+      loadModels();
+    } else {
+      document.getElementById('loginError').textContent = 'Wrong password';
+      document.getElementById('passInput').value = '';
+      document.getElementById('passInput').focus();
+    }
+  }
+  function logout() {
+    document.getElementById('adminPanel').style.display  = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('passInput').value = '';
+    document.getElementById('loginError').textContent = '';
+  }
+
+  // ── Load from Supabase ──
+  async function loadModels() {
+    const { data, error } = await sb.from('models').select('*').order('created_at', { ascending: false });
+    if (error) { showToast('Error loading: ' + error.message, 'red'); return; }
+    models = data || [];
+    renderStats();
+    renderTable();
+  }
+
+  // ── Stats ──
+  function renderStats() {
+    const total = models.length;
+    const avail = models.filter(function(m) { return m.status_color === 's-teal' || m.status_color === 's-pink'; }).length;
+    const fresh = models.filter(function(m) { return m.is_new; }).length;
+    document.getElementById('statsRow').innerHTML =
+      '<div class="stat-card"><div class="stat-num">' + total + '</div><div class="stat-label">Total Models</div></div>' +
+      '<div class="stat-card teal"><div class="stat-num">' + avail + '</div><div class="stat-label">Available Now</div></div>' +
+      '<div class="stat-card orange"><div class="stat-num">' + fresh + '</div><div class="stat-label">New Cast</div></div>';
+  }
+
+  // ── Table ──
+  let filterQ = '';
+  function filterTable(q) { filterQ = q.toLowerCase(); renderTable(); }
+
+  function renderTable() {
+    const list  = models.filter(function(m) { return !filterQ || m.name.toLowerCase().includes(filterQ); });
+    const tbody = document.getElementById('tableBody');
+
+    if (!list.length) {
+      tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No models found</td></tr>';
+      return;
+    }
+
+    const sbClassMap = { 's-pink':'sb-pink','s-teal':'sb-teal','s-dark':'sb-dark','s-orange':'sb-orange','s-sold':'sb-sold' };
+
+    tbody.innerHTML = list.map(function(m, i) {
+      const src     = m.photo_url || ('https://picsum.photos/seed/' + (i+10) + '/44/58');
+      const sbClass = sbClassMap[m.status_color] || 'sb-pink';
+      const newTag  = m.is_new ? '<span class="new-tag">NEW</span>' : '';
+      const loc     = m.location ? ' <span style="font-size:11px;color:#aaa">' + m.location + '</span>' : '';
+      return '<tr>' +
+        '<td><img class="model-photo-cell" src="' + src + '" alt="' + m.name + '" onerror="this.src=\'https://picsum.photos/seed/' + (i+10) + '/44/58\'"></td>' +
+        '<td><b>' + m.name + '</b> (' + m.age + ')' + newTag + loc + '</td>' +
+        '<td style="font-size:12px;color:#777">T' + m.height + '-' + m.bust + (m.cup||'') + '-' + m.waist + '-' + m.hips + '</td>' +
+        '<td style="font-size:12px">' + (m.schedule||'') + '</td>' +
+        '<td><span class="status-badge ' + sbClass + '">' + (m.status||'') + '</span></td>' +
+        '<td><div class="action-btns">' +
+          '<button class="btn-edit"   onclick="openEdit(' + m.id + ')" title="Edit">✏️</button>' +
+          '<button class="btn-delete" onclick="askDelete(' + m.id + ')" title="Delete">🗑️</button>' +
+        '</div></td></tr>';
+    }).join('');
+  }
+
+  // ── Photo Grid ──
+  function renderPhotoGrid() {
+    const grid = document.getElementById('photoGrid');
+    if (!photosArr.length) { grid.innerHTML = ''; return; }
+    grid.innerHTML = photosArr.map(function(p, i) {
+      const isMain  = i === mainPhotoIdx;
+      const badge   = isMain ? 'MAIN' : ((i+1) + '枚目');
+      return '<div class="photo-thumb' + (isMain ? ' main-photo' : '') + '" onclick="setMainPhoto(' + i + ')">' +
+        '<img src="' + p.url + '" alt="photo ' + (i+1) + '" onerror="this.src=\'https://via.placeholder.com/80x107/f0f0f0/999?text=!\'>">' +
+        '<div class="thumb-badge">' + badge + '</div>' +
+        '<button class="thumb-del" onclick="event.stopPropagation();deletePhoto(' + i + ')" title="Remove">×</button>' +
+        '</div>';
+    }).join('');
+  }
+
+  function setMainPhoto(idx) {
+    mainPhotoIdx = idx;
+    renderPhotoGrid();
+  }
+
+  function deletePhoto(idx) {
+    if (photosArr[idx] && photosArr[idx].file) URL.revokeObjectURL(photosArr[idx].url);
+    photosArr.splice(idx, 1);
+    if (mainPhotoIdx >= photosArr.length) mainPhotoIdx = Math.max(0, photosArr.length - 1);
+    renderPhotoGrid();
+    const statusEl = document.getElementById('photoUploadStatus');
+    statusEl.textContent = photosArr.length ? ('合計 ' + photosArr.length + '枚') : '';
+    statusEl.style.display = photosArr.length ? 'block' : 'none';
+    if (!photosArr.length) document.getElementById('photoZone').classList.remove('has-file');
+  }
+
+  function onMultiPhotoChange(input) {
+    const files = Array.from(input.files);
+    if (!files.length) return;
+    const isFirst = photosArr.length === 0;
+    files.forEach(function(file) {
+      photosArr.push({ url: URL.createObjectURL(file), file: file });
+    });
+    if (isFirst) mainPhotoIdx = 0;
+    renderPhotoGrid();
+    const statusEl = document.getElementById('photoUploadStatus');
+    statusEl.style.display = 'block';
+    statusEl.textContent = '合計 ' + photosArr.length + '枚';
+    document.getElementById('photoZone').classList.add('has-file');
+    input.value = '';  // allow re-selecting same files
+  }
+
+  // ── Video ──
+  function previewVideo(url) {
+    const v = document.getElementById('videoPreviewEl');
+    if (url) { v.src = url; v.style.display = 'block'; }
+    else     { v.src = ''; v.style.display = 'none'; }
+  }
+
+  function onVideoFileChange(input) {
+    const file = input.files[0]; if (!file) return;
+    document.getElementById('videoName').textContent  = file.name;
+    document.getElementById('videoName').style.display = 'block';
+    document.getElementById('videoHint').style.display = 'none';
+    document.getElementById('videoZone').classList.add('has-file');
+    previewVideo(URL.createObjectURL(file));
+  }
+
+  // ── Status color ──
+  function onStatusColorChange(sel) {
+    const info  = STATUS_MAP[sel.value] || STATUS_MAP['s-pink'];
+    document.getElementById('fStatus').value = info.text;
+    const badge = document.getElementById('statusPreviewBadge');
+    badge.textContent    = info.text;
+    badge.style.background = info.bg;
+  }
+
+  // ── Schedule ──
+  function onScheduleChange(sel) {
+    const custom = document.getElementById('fScheduleCustom');
+    if (sel.value === 'custom') {
+      custom.style.display = 'block';
+      custom.focus();
+    } else {
+      custom.style.display = 'none';
+      custom.value = '';
+    }
+  }
+
+  // ── Upload to Supabase Storage ──
+  async function uploadFile(file, folder) {
+    const ext  = file.name.split('.').pop().toLowerCase();
+    const path = folder + '/' + Date.now() + '_' + Math.random().toString(36).slice(2,7) + '.' + ext;
+    const { error } = await sb.storage.from('models').upload(path, file, { upsert: true, cacheControl: '3600' });
+    if (error) throw error;
+    const { data: { publicUrl } } = sb.storage.from('models').getPublicUrl(path);
+    return publicUrl;
+  }
+
+  // ── Modal ──
+  function openAdd() {
+    editId = null;
+    document.getElementById('modalTitle').textContent = 'Add Model';
+    clearForm();
+    document.getElementById('modal').classList.add('open');
+    document.getElementById('fName').focus();
+  }
+
+  function openEdit(id) {
+    const m = models.find(function(x) { return x.id === id; });
+    if (!m) return;
+    editId = id;
+    document.getElementById('modalTitle').textContent = 'Edit Model';
+
+    // Basic
+    document.getElementById('fName').value = m.name;
+    document.getElementById('fAge').value  = m.age;
+    if (m.location) document.getElementById('fLocation').value = m.location;
+
+    // Measurements
+    document.getElementById('fT').value   = m.height;
+    document.getElementById('fB').value   = m.bust;
+    document.getElementById('fCup').value = m.cup || 'C';
+    document.getElementById('fW').value   = m.waist;
+    document.getElementById('fH').value   = m.hips;
+
+    // Schedule
+    const schedSel  = document.getElementById('fSchedule');
+    const customInp = document.getElementById('fScheduleCustom');
+    if (SCHEDULES.indexOf(m.schedule) !== -1) {
+      schedSel.value = m.schedule;
+      customInp.style.display = 'none';
+      customInp.value = '';
+    } else {
+      schedSel.value = 'custom';
+      customInp.style.display = 'block';
+      customInp.value = m.schedule || '';
+    }
+
+    // Status
+    document.getElementById('fStatusColor').value = m.status_color || 's-pink';
+    onStatusColorChange(document.getElementById('fStatusColor'));
+    if (m.status) {
+      document.getElementById('fStatus').value = m.status;
+      document.getElementById('statusPreviewBadge').textContent = m.status;
+    }
+
+    // Badges
+    document.getElementById('fIsNew').checked    = !!m.is_new;
+    document.getElementById('fHasPhoto').checked = !!m.has_photo;
+
+    // Video
+    document.getElementById('fVideo').value = m.video_url || '';
+    document.getElementById('fVideoFile').value = '';
+    document.getElementById('videoZone').classList.toggle('has-file', !!m.video_url);
+    document.getElementById('videoHint').style.display = m.video_url ? 'none' : 'block';
+    document.getElementById('videoName').textContent   = m.video_url ? '現在のビデオ' : '';
+    document.getElementById('videoName').style.display = m.video_url ? 'block' : 'none';
+    previewVideo(m.video_url || '');
+
+    // Photos
+    photosArr    = [];
+    mainPhotoIdx = 0;
+    if (m.photo_url) photosArr.push({ url: m.photo_url, file: null });
+    if (m.photos) {
+      try {
+        const arr = JSON.parse(m.photos);
+        if (Array.isArray(arr)) {
+          arr.forEach(function(url) {
+            if (url && !photosArr.find(function(p) { return p.url === url; }))
+              photosArr.push({ url: url, file: null });
+          });
+        }
+      } catch(e) {}
+    }
+    renderPhotoGrid();
+    document.getElementById('photoZone').classList.toggle('has-file', photosArr.length > 0);
+    const ps = document.getElementById('photoUploadStatus');
+    ps.style.display  = photosArr.length ? 'block' : 'none';
+    ps.textContent    = photosArr.length ? ('合計 ' + photosArr.length + '枚') : '';
+
+    // Prices
+    let prices = {};
+    try { prices = m.prices ? JSON.parse(m.prices) : {}; } catch(e) {}
+    ['p60','p75','p100','p120','p180'].forEach(function(k) {
+      const el = document.getElementById(k);
+      if (el) el.value = prices[k] || '';
+    });
+
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function clearForm() {
+    // Basic
+    document.getElementById('fName').value     = '';
+    document.getElementById('fAge').value      = 22;
+    document.getElementById('fLocation').value = '新宿';
+
+    // Measurements
+    document.getElementById('fT').value   = 162;
+    document.getElementById('fB').value   = 86;
+    document.getElementById('fCup').value = 'C';
+    document.getElementById('fW').value   = 57;
+    document.getElementById('fH').value   = 86;
+
+    // Schedule
+    document.getElementById('fSchedule').value      = '17:00〜翌4:00';
+    document.getElementById('fScheduleCustom').style.display = 'none';
+    document.getElementById('fScheduleCustom').value = '';
+
+    // Status
+    document.getElementById('fStatusColor').value = 's-pink';
+    document.getElementById('fStatus').value      = '受付中';
+    document.getElementById('statusPreviewBadge').textContent   = '受付中';
+    document.getElementById('statusPreviewBadge').style.background = '#e91e8c';
+
+    // Badges
+    document.getElementById('fIsNew').checked    = false;
+    document.getElementById('fHasPhoto').checked = false;
+
+    // Video
+    document.getElementById('fVideo').value    = '';
+    document.getElementById('fVideoFile').value = '';
+    document.getElementById('videoZone').classList.remove('has-file');
+    document.getElementById('videoHint').style.display = 'block';
+    document.getElementById('videoName').style.display = 'none';
+    document.getElementById('videoName').textContent   = '';
+    previewVideo('');
+
+    // Photos
+    photosArr    = [];
+    mainPhotoIdx = 0;
+    renderPhotoGrid();
+    document.getElementById('photoZone').classList.remove('has-file');
+    document.getElementById('photoUploadStatus').style.display = 'none';
+    document.getElementById('photoUploadStatus').textContent   = '';
+
+    // Prices
+    ['p60','p75','p100','p120','p180'].forEach(function(k) {
+      const el = document.getElementById(k);
+      if (el) el.value = '';
+    });
+  }
+
+  function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+  async function saveModel() {
+    const name = document.getElementById('fName').value.trim();
+    const age  = parseInt(document.getElementById('fAge').value);
+    if (!name) { showToast('Please enter model name', 'red'); return; }
+    if (!age || age < 18) { showToast('Please enter valid age (18+)', 'red'); return; }
+
+    const saveBtn = document.querySelector('.btn-save');
+    saveBtn.disabled = true; saveBtn.textContent = '⏳ Saving...';
+
+    try {
+      // Upload pending photo files
+      const needUpload = photosArr.some(function(p) { return !!p.file; });
+      if (needUpload) {
+        showToast('Uploading photos...', '');
+        for (let i = 0; i < photosArr.length; i++) {
+          if (photosArr[i].file) {
+            photosArr[i].url  = await uploadFile(photosArr[i].file, 'photos');
+            photosArr[i].file = null;
+          }
+        }
+      }
+
+      // Upload video if file selected
+      let videoUrl = document.getElementById('fVideo').value.trim();
+      const videoFile = document.getElementById('fVideoFile').files[0];
+      if (videoFile) {
+        showToast('Uploading video...', '');
+        videoUrl = await uploadFile(videoFile, 'videos');
+      }
+
+      // Schedule
+      const schedSel = document.getElementById('fSchedule');
+      const schedule = schedSel.value === 'custom'
+        ? (document.getElementById('fScheduleCustom').value.trim() || '17:00〜翌4:00')
+        : schedSel.value;
+
+      // Prices
+      const prices = {};
+      ['p60','p75','p100','p120','p180'].forEach(function(k) {
+        const v = document.getElementById(k).value;
+        if (v) prices[k] = parseInt(v);
+      });
+
+      const payload = {
+        name,
+        age,
+        height:       parseInt(document.getElementById('fT').value) || 162,
+        bust:         parseInt(document.getElementById('fB').value) || 86,
+        cup:          document.getElementById('fCup').value,
+        waist:        parseInt(document.getElementById('fW').value) || 57,
+        hips:         parseInt(document.getElementById('fH').value) || 86,
+        location:     document.getElementById('fLocation').value,
+        schedule:     schedule,
+        status:       document.getElementById('fStatus').value || '受付中',
+        status_color: document.getElementById('fStatusColor').value,
+        is_new:       document.getElementById('fIsNew').checked,
+        has_photo:    document.getElementById('fHasPhoto').checked,
+        photo_url:    (photosArr[mainPhotoIdx] && photosArr[mainPhotoIdx].url) || '',
+        photos:       JSON.stringify(photosArr.map(function(p) { return p.url; })),
+        video_url:    videoUrl,
+        prices:       Object.keys(prices).length ? JSON.stringify(prices) : null,
+      };
+
+      let error;
+      if (editId !== null) {
+        ({ error } = await sb.from('models').update(payload).eq('id', editId));
+        if (!error) showToast('Model updated ✓', 'green');
+      } else {
+        ({ error } = await sb.from('models').insert([payload]));
+        if (!error) showToast('Model added ✓', 'green');
+      }
+
+      if (error) { showToast('Error: ' + error.message, 'red'); return; }
+
+      closeModal();
+      loadModels();
+
+    } catch(e) {
+      showToast('Error: ' + e.message, 'red');
+    } finally {
+      saveBtn.disabled = false; saveBtn.textContent = '💾 Save';
+    }
+  }
+
+  // ── Delete ──
+  function askDelete(id) {
+    const m = models.find(function(x) { return x.id === id; });
+    if (!m) return;
+    deleteId = id;
+    document.getElementById('confirmText').textContent = 'Delete "' + m.name + '"? This cannot be undone.';
+    document.getElementById('confirmModal').classList.add('open');
+  }
+  function closeConfirm() { document.getElementById('confirmModal').classList.remove('open'); deleteId = null; }
+
+  async function confirmDelete() {
+    const { error } = await sb.from('models').delete().eq('id', deleteId);
+    closeConfirm();
+    if (error) { showToast('Error: ' + error.message, 'red'); return; }
+    showToast('Model deleted', 'red');
+    loadModels();
+  }
+
+  // ── Toast ──
+  function showToast(msg, type) {
+    type = type || '';
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className   = 'toast' + (type ? ' ' + type : '');
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(function() { t.classList.remove('show'); }, 2800);
+  }
+
+  document.addEventListener('DOMContentLoaded', initSelects);
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
